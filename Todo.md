@@ -1,0 +1,6 @@
+- [ ] Customer service - User data, sigin, rating, trips,
+- [ ] Driver srevice - Drive data, car data, trips, rating, home location, wallet
+- [ ] API Gateway - Routing
+- [ ] Ride service - ride finding, calls for regular location, current ride
+- [ ] Payment service - methods,
+- [ ] Company - wallet
