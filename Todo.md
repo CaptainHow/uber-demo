@@ -4,3 +4,4 @@
 - [ ] Ride service - ride finding, calls for regular location, current ride
 - [ ] Payment service - methods,
 - [ ] Company - wallet
+- [ ] use zap for logging?

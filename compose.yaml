@@ -1,15 +1,31 @@
-version: "1"
-volumes:
-  data:
-  export:
-services:
-  postrgres-sql:
-    image: docker.io/postgres:14-alpine
-    container-name: postgres-sql
-    ports:
-      - 5432:5432
-    environment:
-      - POSTGRES_PASSWORD=postgres
-    volume:
-      - data: /var/lib/postgres/data
-      - export: /export
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer-database
+  namespace: default
+spec:
+  replicas: 1
+  selecor:
+    matchLabels:
+      app: customer-database
+  template:
+    metadata:
+      lables:
+        app: customer-database
+    spec:
+      containers:
+        - name: customer-database
+          image: docker.io/postgres:14-alpine
+          ports:
+            - containerPort: 5432
+              hostPort: 5432
+          env:
+            - name: POSTGRES_PASSWORD
+              value: postgres
+          volumeMounts:
+            - name: customer-database-data
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: customer-database-data
+          persistentVolumeClaim:
+            claimName: customer-database-data-pvc
