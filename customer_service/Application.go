@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -10,6 +11,8 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
+	database "github.com/uber-demo/customer/db"
+	"github.com/uber-demo/customer/db/migration"
 )
 
 
@@ -86,6 +89,13 @@ func CreateCustomer(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	router := chi.NewRouter()
+
+	err := database.Init() 
+	defer database.CloseDb()
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	migration.Upgrade1()
 
 	router.Use(middleware.Logger)
 
