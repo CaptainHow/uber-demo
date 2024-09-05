@@ -18,8 +18,8 @@ func Upgrade1() {
 func createTables(database *gorm.DB) {
 	tables := []any{}
 
-	tables = addNewTables(database, models.Trip{}, tables)
 	tables = addNewTables(database, models.Customer{}, tables)
+	tables = addNewTables(database, models.Trip{}, tables)
 
 	err := database.Migrator().CreateTable(tables...)
 	if err != nil {

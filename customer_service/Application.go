@@ -8,9 +8,9 @@ import (
 	"strconv"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/render"
 	"github.com/google/uuid"
+	"github.com/uber-demo/customer/api"
 	database "github.com/uber-demo/customer/db"
 	"github.com/uber-demo/customer/db/migration"
 )
@@ -88,7 +88,7 @@ func CreateCustomer(w http.ResponseWriter, r *http.Request) {
 
 
 func main() {
-	router := chi.NewRouter()
+	// router := chi.NewRouter()
 
 	err := database.Init() 
 	defer database.CloseDb()
@@ -97,12 +97,13 @@ func main() {
 	}
 	migration.Upgrade1()
 
-	router.Use(middleware.Logger)
+	api.InitServer()
+	// router.Use(middleware.Logger)
 
-	router.Get("/v1/customer/{id}", GetCustomer)
-	router.Get("/v1/customer", GetAllCustomers)
-	router.Post("/v1/customer", CreateCustomer)
+	// router.Get("/v1/customer/{id}", GetCustomer)
+	// router.Get("/v1/customer", GetAllCustomers)
+	// router.Post("/v1/customer", CreateCustomer)
 
-	http.ListenAndServe(":3000", router)
+	// http.ListenAndServe(":3000", router)
 
 }

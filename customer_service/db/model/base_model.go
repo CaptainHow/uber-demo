@@ -9,7 +9,7 @@ import (
 
 
 type BaseModel struct {
-	Id uuid.UUID `gorm:"type:uuid;default:gen_random_uuid()"`
+	Id uuid.UUID `gorm:"type:uuid;primaryKey;default:gen_random_uuid()"`
 	CreatedAt time.Time `gorm:"type:TIMESTAMP with time zone;not null"`
 	ModifiedAt time.Time `gorm:"type:TIMESTAMP with time zone;not null"`
 }
