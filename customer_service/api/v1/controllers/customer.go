@@ -1,8 +1,12 @@
 package controllers
 
 import (
+	"errors"
+	"fmt"
+	"log"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/render"
@@ -35,10 +39,31 @@ func CreateCustomer(w http.ResponseWriter, r *http.Request) {
 	err := render.DecodeJSON(r.Body, &customer)
 	if err != nil {
 		helper.RespondWithError(w, http.StatusBadRequest, err.Error())
+		return
 	}
 
 	db := database.GetDb()
-	db.Debug()
+	// Check if User already exists
+	start := time.Now()
+	logger := log.Default()
+	logger.Println(start)
+	err = db.Transaction(func(tx *gorm.DB) error {
+		var user string
+		tx.Model(&dto.Customer{}).Where("username=?", customer.Username).Select("username").Find(&user)
+		fmt.Println(user)
+		if user != "" {
+			return errors.New("username already exists")
+		}
+		return nil
+	})
+	
+	if err != nil {
+		helper.RespondWithError(w, http.StatusBadRequest, err.Error())
+		return 
+	}
+
+	customer.Password, _ = helper.HashPassword(customer.Password)
+
 	err = db.Transaction(func(tx *gorm.DB) error {
 		if err := tx.Model(&dto.Customer{}).Create(&customer).Error; err != nil {
 			return err

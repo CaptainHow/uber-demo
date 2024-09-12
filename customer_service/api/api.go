@@ -32,14 +32,17 @@ func RegisterRouters(baseRouter *chi.Mux) {
 	customer := chi.NewRouter()
 	health := chi.NewRouter()
 	test := chi.NewRouter()
+	auth := chi.NewRouter()
 
 	baseRouter.Mount("/api", api)
 	api.Mount("/v1", v1)
 	api.Mount("/v2", v2)
+	v1.Mount("/auth", auth)
 	v1.Mount("/customer", customer)
 	v1.Mount("/health", health)
 	v1.Mount("/test", test)
 
+	router.Auth(auth)
 	router.Customer(customer)
 	router.Health(health)
 	router.Test(test)

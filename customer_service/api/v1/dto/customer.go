@@ -17,3 +17,8 @@ type RegisterCutomer struct {
 	Password string `json:"password"`
 	Rating int `json:"rating"`
 }
+
+type AuthenticateCustomer struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
