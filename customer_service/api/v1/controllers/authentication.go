@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/go-chi/render"
@@ -41,16 +40,17 @@ func LoginCustomer(w http.ResponseWriter, r *http.Request) {
 	}
 
 	token, err := helper.GenerateJWTToken(customerFound.Id)
-	fmt.Println(token)
 	if err != nil {
 		helper.RespondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	if err != nil {
-		helper.RespondWithError(w, http.StatusInternalServerError, err.Error())
-		return
-	}
+	w.Header().Add("token", token)
+
+	// if err != nil {
+	// 	helper.RespondWithError(w, http.StatusInternalServerError, err.Error())
+	// 	return
+	// }
 
 	helper.RespondWithJSON(w, http.StatusOK, map[string]uuid.UUID{"Id": customerFound.Id})
 }

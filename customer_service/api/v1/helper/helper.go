@@ -37,10 +37,30 @@ func VerifyPassword(password, hash string) bool {
 func GenerateJWTToken(userID uuid.UUID) (string, error) {
 	godotenv.Load(".env")
 	jwt_secret := os.Getenv("JWT_SECRET")
-	fmt.Println(jwt_secret)
 	claims := jwt.MapClaims{}
 	claims["cust_id"] = userID
 	claims["exp"] = time.Now().Add(time.Hour * 1).Unix()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return token.SignedString([]byte(jwt_secret))
+}
+
+func VerifyToken(tokenString string) (jwt.MapClaims, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+
+		// A type assertion used token.Method.(*jwt.SigningMethodHMAC) checking whether the token gotten is of type jwt.SigningMethodHMAC
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("invalid signing method")
+		}
+		return []byte(os.Getenv("JWT_SECRET")), nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		return claims, nil
+	}
+
+	return nil, fmt.Errorf("invalid token")
 }
