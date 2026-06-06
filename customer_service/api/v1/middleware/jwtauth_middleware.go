@@ -7,7 +7,7 @@ import (
 	"github.com/uber-demo/customer/api/v1/helper"
 )
 
-func AuthenticationMiddleware()  func (next http.Handler) http.Handler {
+func AuthenticationMiddleware() func (next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			tokenString := r.Header.Get("Authorization")

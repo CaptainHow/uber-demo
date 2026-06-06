@@ -45,6 +45,7 @@ func GenerateJWTToken(userID uuid.UUID) (string, error) {
 }
 
 func VerifyToken(tokenString string) (jwt.MapClaims, error) {
+	godotenv.Load(".env")
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 
 		// A type assertion used token.Method.(*jwt.SigningMethodHMAC) checking whether the token gotten is of type jwt.SigningMethodHMAC
@@ -53,7 +54,6 @@ func VerifyToken(tokenString string) (jwt.MapClaims, error) {
 		}
 		return []byte(os.Getenv("JWT_SECRET")), nil
 	})
-
 	if err != nil {
 		return nil, err
 	}

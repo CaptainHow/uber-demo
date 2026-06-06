@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strconv"
 	"time"
 
 	"github.com/go-chi/chi/v5"
@@ -19,16 +18,17 @@ import (
 
 
 func GetCustomer(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(chi.URLParam(r, "id"))
-	if err != nil {
-		helper.RespondWithError(w, http.StatusInternalServerError, err.Error())
-	}
+	id := chi.URLParam(r, "id")
+
+	// if err != nil {
+	// 	helper.RespondWithError(w, http.StatusInternalServerError, err.Error())
+	// }
 	// fmt.Println(id, len(customersArray))
 	// if id >= len(customersArray) || id < 0 {
 	// 	respondWithError(w, http.StatusBadRequest, "User does not exists")
 	// 	return
 	// }
-	helper.RespondWithJSON(w, http.StatusOK, map[string]string{"msg":"Customer " + strconv.Itoa(id)})
+	helper.RespondWithJSON(w, http.StatusOK, map[string]string{"msg":"Customer " + id})
 	// OR
 	// render.JSON(w, r, customer) 	
 }

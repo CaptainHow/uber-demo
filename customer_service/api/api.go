@@ -38,7 +38,8 @@ func RegisterRouters(baseRouter *chi.Mux) {
 	authTest := chi.NewRouter()
 
 	authTest.Use(middlewares.AuthenticationMiddleware())
-
+	// customer.Use(middlewares.AuthenticationMiddleware())
+	
 	baseRouter.Mount("/api", api)
 	api.Mount("/v1", v1)
 	api.Mount("/v2", v2)
@@ -47,7 +48,7 @@ func RegisterRouters(baseRouter *chi.Mux) {
 	v1.Mount("/health", health)
 	v1.Mount("/test", test)
 	customer.Mount("/authtest", authTest)
-
+	
 	router.Auth(auth)
 	router.Customer(customer)
 	router.Health(health)
